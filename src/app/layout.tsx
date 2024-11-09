@@ -5,6 +5,7 @@ import "./globals.css";
 import { getServerSession } from "next-auth";
 import SessionProvider from "./components/SessionProvider";
 import NavMenu from "./components/NavMenu";
+import Footer from "./components/Footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -37,6 +38,7 @@ export default async function RootLayout({
           <NavMenu />
           {children}
         </SessionProvider>
+        <Footer />
       </body>
     </html>
   );
