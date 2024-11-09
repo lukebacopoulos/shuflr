@@ -6,14 +6,37 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 export default async function Top() {
   const session = await getServerSession(authOptions);
   if (!session) {
-    return <h1>You need to be signed in to view this page</h1>;
+    return (
+      <div className="bg-black h-screen text-white">
+        <h1>You need to be signed in to view this page</h1>
+      </div>
+    );
   }
 
   const { accessToken } = session;
-  const topItems = await getTopItems(accessToken, "artists", "long_term");
+  const [topArtistLong, topArtistMed, topArtistShort] = await Promise.all([
+    getTopItems(accessToken, "artists", "long_term"),
+    getTopItems(accessToken, "artists", "medium_term"),
+    getTopItems(accessToken, "artists", "short_term"),
+  ]);
+
   return (
-    <div className="h-auto flex justify-center items-center">
-      <TopArtistView items={topItems} />
+    <div className="h-screen w-full flex bg-black text-white">
+      <div className="flex flex-col items-center w-full">
+        {" "}
+        <h1>Last Month:</h1>
+        <TopArtistView items={topArtistShort} />
+      </div>
+      <div className="flex flex-col items-center w-full">
+        {" "}
+        <h1>Last 6 Months:</h1>
+        <TopArtistView items={topArtistMed} />
+      </div>
+      <div className="flex flex-col items-center w-full">
+        {" "}
+        <h1>Last Year:</h1>
+        <TopArtistView items={topArtistLong} />
+      </div>
     </div>
   );
 }

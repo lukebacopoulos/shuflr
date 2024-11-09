@@ -1,4 +1,7 @@
 "use client";
+
+import { ScrollArea } from "@/components/ui/scroll-area";
+
 export default function TopArtistView({ items }) {
   // Check if items is an array and has at least one element
   if (!Array.isArray(items) || items.length === 0) {
@@ -7,22 +10,29 @@ export default function TopArtistView({ items }) {
 
   return (
     <>
-      <h1>Top Artists:</h1>
-      <ol>
-        {items.map((artistInfo) => (
-          <li key={artistInfo[0]}>
-            {" "}
-            <img
-              src={artistInfo[1] || "/default-artist-image.png"}
-              alt={artistInfo[0]}
-              width={30}
-              height={30}
-              className="rounded-full"
-            />
-            <span>{artistInfo[0]}</span>
-          </li>
-        ))}
-      </ol>
+      <ScrollArea className="h-1/2 w-4/5 border-2 rounded-lg bg-zinc-900 text-white">
+        <ol className="list-decimal">
+          {" "}
+          {/* Add pl-4 for left padding */}
+          {items.map((artistInfo, index) => (
+            <li
+              key={artistInfo[0]}
+              className="odd:bg-zinc-800 even:bg-zinc-900 flex items-center justify-between p-2"
+            >
+              <span className="order-first">{index + 1}. </span>{" "}
+              {/* Add numbering */}
+              <span>{artistInfo[0]}</span>
+              <img
+                src={artistInfo[1] || "/default-artist-image.png"}
+                alt={artistInfo[0]}
+                width={30}
+                height={30}
+                className="rounded-full m-2"
+              />
+            </li>
+          ))}
+        </ol>
+      </ScrollArea>
     </>
   );
 }
