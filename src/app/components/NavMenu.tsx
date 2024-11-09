@@ -1,6 +1,7 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { FaSpotify } from "react-icons/fa";
 
 function AuthButton() {
@@ -47,7 +48,9 @@ function AuthButton() {
 
 export default function NavMenu() {
   return (
-    <div className="flex h-20 justify-end">
+    <div className="flex h-20 justify-between items-center">
+      <Link href="/">Home</Link>
+      <Link href="/top">Top</Link>
       <AuthButton />
     </div>
   );
