@@ -9,46 +9,45 @@ function AuthButton() {
   if (session) {
     return (
       <>
-        <div className="flex items-center">
+        <div className="flex items-center p-2 mx-8">
+          {/* Hello, {session?.user?.name}. */}
+          {session?.user?.image && (
+            <Image
+              src={session.user.image}
+              alt="User Profile Image"
+              width={30}
+              height={30}
+              className="rounded-full"
+              unoptimized
+            />
+          )}
           <button
             onClick={() => signOut()}
             className="p-2 m-4 text-sm hover:underline"
           >
             Sign Out
           </button>
-          {/* Hello, {session?.user?.name}. */}
-          {session?.user?.image && (
-            <Image
-              src={session.user.image}
-              alt="User Profile Image"
-              width={40}
-              height={40}
-              className="rounded-full mr-4"
-              unoptimized
-            />
-          )}
         </div>
       </>
     );
   }
 
   return (
-    <div className="flex items-center m-4 p-2 ">
-      {" "}
+    <div className="flex items-center p-2 mx-8">
+      <FaSpotify size={40} />
       <button
         onClick={() => signIn("spotify")}
-        className=" mx-4 text-sm hover:underline"
+        className=" m-4 ml-6 text-sm hover:underline"
       >
         Sign In
       </button>
-      <FaSpotify size={30} />
     </div>
   );
 }
 
 export default function NavMenu() {
   return (
-    <div className="border-b flex justify-end">
+    <div className="flex h-20 justify-end">
       <AuthButton />
     </div>
   );
