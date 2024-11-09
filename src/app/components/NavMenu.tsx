@@ -8,7 +8,7 @@ function AuthButton() {
   if (session) {
     return (
       <>
-        <div className="p-4">
+        <div className="">
           {session?.user?.name}
           <button onClick={() => signOut()} className="p-2 border-2 rounded-md">
             Sign Out
