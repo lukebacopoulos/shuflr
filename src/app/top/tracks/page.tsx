@@ -1,9 +1,9 @@
-import TopArtistView from "./components/TopArtistView";
-import getTopItems from "../../../lib/getTopItem";
+import TopArtistView from "../components/TopArtistView";
+import getTopItems from "../../../../lib/getTopItem";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../../api/auth/[...nextauth]/route";
 
-export default async function Top() {
+export default async function TopTracks() {
   const session = await getServerSession(authOptions);
   if (!session) {
     return (
@@ -15,9 +15,9 @@ export default async function Top() {
 
   const { accessToken } = session;
   const [topArtistLong, topArtistMed, topArtistShort] = await Promise.all([
-    getTopItems(accessToken, "artists", "long_term"),
-    getTopItems(accessToken, "artists", "medium_term"),
-    getTopItems(accessToken, "artists", "short_term"),
+    getTopItems(accessToken, "tracks", "long_term"),
+    getTopItems(accessToken, "tracks", "medium_term"),
+    getTopItems(accessToken, "tracks", "short_term"),
   ]);
 
   return (
