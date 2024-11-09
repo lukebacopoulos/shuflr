@@ -10,9 +10,9 @@ export default async function Top() {
   }
 
   const { accessToken } = session;
-  const topItems = await getTopItems(accessToken, "artists");
+  const topItems = await getTopItems(accessToken, "artists", "long_term");
   return (
-    <div className="h-[90vh] flex justify-center items-center">
+    <div className="h-auto flex justify-center items-center">
       <TopArtistView items={topItems} />
     </div>
   );
