@@ -48,7 +48,7 @@ function AuthButton() {
 
 export default function NavMenu() {
   return (
-    <div className="flex h-20 justify-between items-center bg-black text-white border-b-2">
+    <div className="flex h-20 justify-between items-center bg-black text-white text-xl">
       <Link href="/" className="pl-10 hover:underline">
         Home
       </Link>

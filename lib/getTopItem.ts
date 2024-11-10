@@ -30,7 +30,6 @@ export default async function getTopItems(
       return [artist.name, imageUrl]; // Return an array with artist name and image URL
     });
   
-    console.log(artistInfoWithImages)
     return artistInfoWithImages;
   }
   
