@@ -10,7 +10,7 @@ export default function TopArtistView({ items }) {
 
   return (
     <>
-      <ScrollArea className="h-1/2 w-4/5 border-2 rounded-lg bg-zinc-900 text-white">
+      <ScrollArea className="h-1/2 w-4/5 rounded-lg bg-zinc-900 text-white">
         <ol className="list-decimal">
           {" "}
           {/* Add pl-4 for left padding */}

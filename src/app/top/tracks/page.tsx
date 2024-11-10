@@ -21,20 +21,23 @@ export default async function TopTracks() {
   ]);
 
   return (
-    <div className="h-screen w-full flex bg-black text-white">
-      <div className="flex flex-col items-center w-full">
+    <div className="h-[90vh] w-full flex bg-black text-white">
+      <div className="flex flex-col items-center justify-center w-full">
         {" "}
-        <h1>Last Month:</h1>
+        <h1 className="text-2xl">Last Month</h1>
+        <br />
         <TopArtistView items={topArtistShort} />
       </div>
-      <div className="flex flex-col items-center w-full">
+      <div className="flex flex-col items-center justify-center w-full">
         {" "}
-        <h1>Last 6 Months:</h1>
+        <h1 className="text-2xl">Last 6 Months</h1>
+        <br />
         <TopArtistView items={topArtistMed} />
       </div>
-      <div className="flex flex-col items-center w-full">
+      <div className="flex flex-col items-center justify-center w-full">
         {" "}
-        <h1>Last Year:</h1>
+        <h1 className="text-2xl">Last Year</h1>
+        <br />
         <TopArtistView items={topArtistLong} />
       </div>
     </div>

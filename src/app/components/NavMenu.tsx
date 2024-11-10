@@ -48,10 +48,19 @@ function AuthButton() {
 
 export default function NavMenu() {
   return (
-    <div className="flex h-20 justify-between items-center bg-black text-white">
-      <Link href="/">Home</Link>
-      <Link href="/top/artists">Top Artists</Link>
-      <Link href="/top/tracks">Top Tracks</Link>
+    <div className="flex h-20 justify-between items-center bg-black text-white border-b-2">
+      <Link href="/" className="pl-10 hover:underline">
+        Home
+      </Link>
+      <Link href="/shuffle" className="hover:underline">
+        Shuffle
+      </Link>
+      <Link href="/top/artists" className="hover:underline">
+        Top Artists
+      </Link>
+      <Link href="/top/tracks" className="hover:underline">
+        Top Tracks
+      </Link>
       <AuthButton />
     </div>
   );
