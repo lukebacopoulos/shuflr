@@ -7,7 +7,7 @@ export default async function TopArtists() {
   const session = await getServerSession(authOptions);
   if (!session) {
     return (
-      <div className="bg-black h-screen text-white">
+      <div className="bg-black h-screen text-white flex items-center justify-center">
         <h1>You need to be signed in to view this page</h1>
       </div>
     );
@@ -21,7 +21,7 @@ export default async function TopArtists() {
   ]);
 
   return (
-    <div className="h-[90vh] w-full flex bg-black text-white">
+    <div className="h-screen w-full flex bg-black text-white">
       <div className="flex flex-col items-center justify-center w-full">
         {" "}
         <h1 className="text-2xl">Last Month</h1>

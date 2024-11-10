@@ -7,7 +7,7 @@ export default async function TopTracks() {
   const session = await getServerSession(authOptions);
   if (!session) {
     return (
-      <div className="bg-black h-screen text-white">
+      <div className="bg-black h-screen text-white flex justify-center items-center">
         <h1>You need to be signed in to view this page</h1>
       </div>
     );

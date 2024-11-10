@@ -10,14 +10,14 @@ export default function TopArtistView({ items }) {
 
   return (
     <>
-      <ScrollArea className="h-1/2 w-4/5 rounded-lg bg-zinc-900 text-white">
+      <ScrollArea className="h-3/4 w-4/5 rounded-lg bg-zinc-900 text-white">
         <ol className="list-decimal">
           {" "}
           {/* Add pl-4 for left padding */}
           {items.map((artistInfo, index) => (
             <li
               key={artistInfo[0]}
-              className="odd:bg-zinc-800 even:bg-zinc-900 flex items-center justify-between p-2"
+              className="bg-zinc-800 hover:bg-zinc-700 flex items-center justify-between px-2"
             >
               <span className="order-first">{index + 1}. </span>{" "}
               {/* Add numbering */}
