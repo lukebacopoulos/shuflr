@@ -1,3 +1,6 @@
+import NextAuth from "next-auth";
+import { Session as NextAuthSession } from 'next-auth'
+
 type SpotifyArtist = {
     id: string;
     name: string;
@@ -15,3 +18,11 @@ type SpotifyArtist = {
   
   type SpotifyTopItem = SpotifyArtist | SpotifyTrack;
   
+declare module 'next-auth' {
+  interface Session extends NextAuthSession {
+    accessToken?: string;
+  }
+  interface JWT {
+    accessToken?: string;
+  }
+}

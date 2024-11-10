@@ -1,7 +1,7 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-
+import Image from "next/image";
 export default function TopArtistView({ items }) {
   // Check if items is an array and has at least one element
   if (!Array.isArray(items) || items.length === 0) {
@@ -22,7 +22,7 @@ export default function TopArtistView({ items }) {
               <span className="order-first">{index + 1}. </span>{" "}
               {/* Add numbering */}
               <span>{artistInfo[0]}</span>
-              <img
+              <Image
                 src={artistInfo[1] || "/default-artist-image.png"}
                 alt={artistInfo[0]}
                 width={30}

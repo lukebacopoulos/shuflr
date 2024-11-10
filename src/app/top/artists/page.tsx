@@ -22,6 +22,7 @@ export default async function TopArtists() {
 
   return (
     <div className="h-screen w-full flex bg-black text-white">
+      <h1 className="text-4xl p-4">Your Top Artists.</h1>
       <div className="flex flex-col items-center justify-center w-full">
         {" "}
         <h1 className="text-2xl">Last Month</h1>

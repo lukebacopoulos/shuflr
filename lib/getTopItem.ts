@@ -17,7 +17,6 @@ export default async function getTopItems(
       return [];
     }
   
-    // Extract artist info with images (if available) from the initial response
     const artistInfoWithImages = data.items.map((artist) => {
       let imageUrl = "";
   
@@ -31,6 +30,7 @@ export default async function getTopItems(
       return [artist.name, imageUrl]; // Return an array with artist name and image URL
     });
   
+    console.log(artistInfoWithImages)
     return artistInfoWithImages;
   }
   
