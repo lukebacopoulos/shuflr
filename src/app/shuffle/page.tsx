@@ -2,7 +2,6 @@ import getUserPlaylists from "../../../lib/getUserPlaylists";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import UserPlaylistView from "./components/UserPlaylistView";
-import { User } from "lucide-react";
 
 export default async function ShufflePage() {
   const session = await getServerSession(authOptions);
@@ -19,7 +18,7 @@ export default async function ShufflePage() {
 
   return (
     <div className="h-screen flex justify-center items-center bg-black text-white">
-      <UserPlaylistView items={userPlaylists} token={accessToken} />
+      <UserPlaylistView items={userPlaylists} />
     </div>
   );
 }

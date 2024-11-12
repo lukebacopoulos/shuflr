@@ -1,26 +1,13 @@
 "use client";
-import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { getPlaylistTracks } from "@/app/actions/getPlaylistTracks";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-type Track = {
-  trackId: string;
-  trackName: string;
-  artistName: string;
-};
+export default function UserPlaylistView({ items }) {
+  const router = useRouter();
 
-type SelectedPlaylist = {
-  tracks: Track[];
-  trackCount: number;
-};
-
-export default function UserPlaylistView({ items, token }) {
-  const [selectedPlaylist, setSelectedPlaylist] =
-    useState<SelectedPlaylist | null>(null);
-  const handlePlaylistClick = async (playlistId) => {
-    const { tracks, trackCount } = await getPlaylistTracks(token, playlistId);
-    setSelectedPlaylist({ tracks, trackCount });
+  const handlePlaylistClick = (playlistId) => {
+    router.push(`/shuffle/${playlistId}`);
   };
 
   if (!Array.isArray(items) || items.length === 0) {
@@ -28,35 +15,34 @@ export default function UserPlaylistView({ items, token }) {
   }
 
   return (
-    <>
-      {selectedPlaylist ? (
-        <div>
-          <h2>Tracks in Playlist: ({selectedPlaylist.trackCount})</h2>
-        </div>
-      ) : (
-        <ScrollArea className="h-3/4 w-1/4 rounded-lg bg-zinc-900 text-white">
-          <ul>
-            {items.map((playlistInfo, index) => (
-              <li
-                key={playlistInfo[1]} // Use playlist ID as the key
-                className="bg-zinc-800 hover:bg-zinc-700 flex items-center justify-between px-2 cursor-pointer"
-                onClick={() => handlePlaylistClick(playlistInfo[1])}
-              >
-                <span className="mx-10 flex items-center">
-                  {playlistInfo[0]}
-                </span>
-                <Image
-                  src={playlistInfo[2] || "/default-artist-image.png"}
-                  alt={playlistInfo[0]}
-                  width={100}
-                  height={100}
-                  className="m-2 rounded-lg"
-                />
-              </li>
-            ))}
-          </ul>
-        </ScrollArea>
-      )}
-    </>
+    <ScrollArea className="h-3/4 w-1/4 rounded-lg bg-zinc-900 text-white">
+      <ul>
+        {/* Add "Liked Tracks" as the first item */}
+        <li
+          className="bg-zinc-800 hover:bg-zinc-700 flex items-center justify-between px-2 cursor-pointer"
+          onClick={() => handlePlaylistClick("liked")}
+        >
+          <span className="mx-10 flex items-center my-10">Liked Tracks</span>
+        </li>
+
+        {/* Map through the rest of the playlists */}
+        {items.map((playlistInfo, index) => (
+          <li
+            key={playlistInfo[1]} // Use playlist ID as the key
+            className="bg-zinc-800 hover:bg-zinc-700 flex items-center justify-between px-2 cursor-pointer"
+            onClick={() => handlePlaylistClick(playlistInfo[1])}
+          >
+            <span className="mx-10 flex items-center">{playlistInfo[0]}</span>
+            <Image
+              src={playlistInfo[2] || "/default-artist-image.png"}
+              alt={playlistInfo[0]}
+              width={100}
+              height={100}
+              className="m-2 rounded-lg"
+            />
+          </li>
+        ))}
+      </ul>
+    </ScrollArea>
   );
 }

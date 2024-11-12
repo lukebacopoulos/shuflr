@@ -18,7 +18,7 @@ export default function Footer() {
           href="http://www.apache.org/licenses/LICENSE-2.0"
           target="_blank"
         >
-          Licensed under the Apache License 2.0
+          License
         </a>
       </footer>
     </>
