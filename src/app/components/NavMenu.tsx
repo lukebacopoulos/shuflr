@@ -2,7 +2,6 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { FaSpotify } from "react-icons/fa";
 
 function AuthButton() {
   const { data: session } = useSession();
@@ -35,7 +34,6 @@ function AuthButton() {
 
   return (
     <div className="flex items-center p-2 mx-8">
-      <FaSpotify size={40} />
       <button
         onClick={() => signIn("spotify")}
         className=" m-4 ml-6 text-sm hover:underline"
