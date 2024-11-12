@@ -5,6 +5,7 @@ import TopItemTabs from "../components/TopArtistTabs";
 
 export default async function TopArtists() {
   const session = await getServerSession(authOptions);
+  console.log(session);
   if (!session) {
     return (
       <div className="bg-black h-screen text-white flex items-center justify-center">
@@ -14,6 +15,7 @@ export default async function TopArtists() {
   }
 
   const { accessToken } = session;
+  console.log(accessToken);
   const [topArtistLong, topArtistMed, topArtistShort] = await Promise.all([
     getTopItems(accessToken, "artists", "long_term"),
     getTopItems(accessToken, "artists", "medium_term"),
