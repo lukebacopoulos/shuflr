@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import PlaylistTracks from "../components/PlaylistTracks";
 import getLikedTracks from "../../../../lib/getLikedTracks";
-import Link from "next/link";
 
 export default async function shufflePlaylistPage({ params }) {
   const { playlistId } = await params;

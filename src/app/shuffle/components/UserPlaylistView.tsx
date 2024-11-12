@@ -31,7 +31,7 @@ export default function UserPlaylistView({ items }) {
             </li>
 
             {/* Map through the rest of the playlists */}
-            {items.map((playlistInfo, index) => (
+            {items.map((playlistInfo) => (
               <li
                 key={playlistInfo[1]} // Use playlist ID as the key
                 className="bg-zinc-800 hover:bg-zinc-700 flex items-center justify-between px-2 cursor-pointer"

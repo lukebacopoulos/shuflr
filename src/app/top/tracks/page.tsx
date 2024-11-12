@@ -1,4 +1,3 @@
-import TopArtistView from "../components/TopArtistView";
 import getTopItems from "../../../../lib/getTopItem";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
