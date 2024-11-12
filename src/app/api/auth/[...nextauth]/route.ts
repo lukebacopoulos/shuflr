@@ -7,7 +7,7 @@ export const authOptions = {
             clientId: process.env.SPOTIFY_ID ?? "",
             clientSecret: process.env.SPOTIFY_SECRET ?? "",
             authorization: {
-                params: { scope: "user-top-read, user-library-read"},
+                params: { scope: "user-top-read, user-library-read, user-modify-playback-state"},
             },
         }),
     ],

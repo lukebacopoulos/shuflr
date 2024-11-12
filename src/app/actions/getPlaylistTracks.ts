@@ -6,8 +6,6 @@ export async function getPlaylistTracks(token: string, playlistId: string) {
         return { tracks: [], trackCount: 0 };
     }
 
-    console.log("Fetching tracks for playlist ID:", playlistId);
-
     const response = await fetch(
         `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
         {
@@ -18,7 +16,6 @@ export async function getPlaylistTracks(token: string, playlistId: string) {
     );
 
     const data = await response.json();
-    console.log("Spotify Playlist Tracks Response:", data);
 
     if (data.error) {
         console.error("Spotify API Error:", data.error);

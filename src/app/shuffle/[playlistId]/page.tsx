@@ -24,7 +24,7 @@ export default async function shufflePlaylistPage({ params }) {
   }
   return (
     <div className="h-screen w-full bg-black text-white flex justify-center pt-20">
-      <PlaylistTracks playlist={tracks}></PlaylistTracks>
+      <PlaylistTracks playlist={tracks} token={accessToken}></PlaylistTracks>
     </div>
   );
 }

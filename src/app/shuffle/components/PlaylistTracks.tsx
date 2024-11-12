@@ -5,6 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Image from "next/image";
 import shufflePlaylist from "../../../../lib/shufflePlaylist";
 import { Shuffle } from "lucide-react";
+import pushToQueue from "@/app/actions/pushToQueue";
 
 type Track = {
   trackId: string;
@@ -18,9 +19,10 @@ type PlaylistProps = {
     tracks: Track[];
     trackCount: number;
   } | null;
+  token: string; // Accept the token as a prop
 };
 
-export default function PlaylistTracks({ playlist }: PlaylistProps) {
+export default function PlaylistTracks({ playlist, token }: PlaylistProps) {
   const [shuffledTracks, setShuffledTracks] = useState<Track[]>([]);
   const [refreshKey, setRefreshKey] = useState<number>(0); // Key for forcing re-render
 
@@ -43,20 +45,39 @@ export default function PlaylistTracks({ playlist }: PlaylistProps) {
     }
   };
 
+  const handlePushQueue = async () => {
+    try {
+      // Push each track to the queue using the provided token
+      for (const track of shuffledTracks) {
+        await pushToQueue(token, track.trackId); // Push each track to the queue
+      }
+      console.log("Tracks successfully added to the queue.");
+    } catch (error) {
+      console.error("Error adding tracks to the queue:", error);
+    }
+  };
+
   if (!playlist || !playlist.tracks || playlist.tracks.length === 0) {
     return <p>No tracks available in this playlist.</p>;
   }
 
   return (
     <div key={refreshKey}>
-      <button
-        onClick={reshuffleTracks}
-        className="my-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-      >
-        <Shuffle />
-      </button>
+      <div className="flex items-center">
+        <button
+          onClick={reshuffleTracks}
+          className="m-4 p-4 bg-blue-500 text-white rounded-lg"
+        >
+          <Shuffle />
+        </button>
+        <button
+          className="m-4 p-4 bg-blue-500 text-white rounded-lg"
+          onClick={handlePushQueue}
+        >
+          Push to queue
+        </button>
+      </div>
       <ScrollArea className="h-3/4 w-3/4 rounded-lg bg-zinc-900 text-white p-4">
-        <h2>Tracks in Playlist: ({playlist.trackCount})</h2>
         <ul>
           {shuffledTracks.map((track) => (
             <li key={track.trackId} className="flex items-center mb-4">
