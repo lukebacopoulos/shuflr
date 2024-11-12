@@ -6,7 +6,9 @@ import Image from "next/image";
 import shufflePlaylist from "../../../../lib/shufflePlaylist";
 import { Shuffle } from "lucide-react";
 import pushToQueue from "@/app/actions/pushToQueue";
-
+import Link from "next/link";
+import { Undo2 } from "lucide-react";
+import { ArrowBigRightDash } from "lucide-react";
 type Track = {
   trackId: string;
   trackName: string;
@@ -63,18 +65,21 @@ export default function PlaylistTracks({ playlist, token }: PlaylistProps) {
 
   return (
     <div key={refreshKey}>
-      <div className="flex items-center">
+      <div className="flex items-center w-3/4 justify-between">
+        <Link href="/shuffle" className="text-white px-4">
+          <Undo2 />
+        </Link>
         <button
           onClick={reshuffleTracks}
-          className="m-4 p-4 bg-blue-500 text-white rounded-lg"
+          className="m-4 p-4 text-white rounded-lg"
         >
           <Shuffle />
         </button>
         <button
-          className="m-4 p-4 bg-blue-500 text-white rounded-lg"
+          className="m-4 p-4 bg-green-600 hover:bg-green-500 text-white rounded-lg"
           onClick={handlePushQueue}
         >
-          Push to queue
+          <ArrowBigRightDash />{" "}
         </button>
       </div>
       <ScrollArea className="h-3/4 w-3/4 rounded-lg bg-zinc-900 text-white p-4">
