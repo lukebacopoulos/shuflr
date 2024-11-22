@@ -1,5 +1,4 @@
 import { getAccessToken } from '@/lib/get-token';
-import { NextResponse } from 'next/server';
 
 export async function getTopArtists() {
   try {

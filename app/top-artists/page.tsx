@@ -1,4 +1,3 @@
-import TopArtists from "@/components/TopArtists";
 import { getTopArtists } from "@/lib/get-top-artists";
 import ArtistList from "./components/ArtistList";
 
