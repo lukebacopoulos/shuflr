@@ -31,7 +31,7 @@ export async function getAccessToken() {
 
     console.error("Error fetching Spotify data:", error);
     return NextResponse.json(
-      { message: "Internal Server Error", error: error.message },
+      { message: "Internal Server Error"},
       { status: 500 }
     );
   }
