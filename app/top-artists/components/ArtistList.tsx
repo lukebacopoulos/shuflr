@@ -34,7 +34,7 @@ export default function ArtistList({ artists }: ArtistListProps) {
                 <TableCell>
                   <Link
                     href={artist.external_urls.spotify}
-                    className="hover:text-blue-500 hover:underline text-lg pl-10 md:text-xl"
+                    className="hover:text-blue-500 hover:underline text-md pl-10 md:text-xl"
                     target="_blank"
                   >
                     {artist.name}
@@ -50,7 +50,7 @@ export default function ArtistList({ artists }: ArtistListProps) {
                       <img
                         src={artist.images[0].url} // Use the first image URL
                         alt={`${artist.name}'s image`}
-                        className="w-8 h-8 md:w-20 md:h-20 object-cover rounded-full mr-4"
+                        className="w-8 h-8 md:w-20 md:h-20 rounded-full mr-4"
                       />
                     </Link>
                   ) : (
