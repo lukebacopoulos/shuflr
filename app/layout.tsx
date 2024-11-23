@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider, ClerkLoading, ClerkLoaded } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 
 const geistSans = localFont({
@@ -44,7 +44,10 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Header />
-            {children}
+            <ClerkLoading>
+              <div>Clerk is loading...</div>
+            </ClerkLoading>
+            <ClerkLoaded>{children}</ClerkLoaded>
           </ThemeProvider>
         </body>
       </html>
