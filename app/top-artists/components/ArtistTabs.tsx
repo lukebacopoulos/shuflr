@@ -26,21 +26,30 @@ export default function ArtistTabs({
   artists_long,
 }: ArtistTabsProps) {
   return (
-    <Tabs defaultValue="short_term" className="">
-      <TabsList>
-        <TabsTrigger value="short_term">1 Month</TabsTrigger>
-        <TabsTrigger value="medium_term">6 Months</TabsTrigger>
-        <TabsTrigger value="long_term">12 Months</TabsTrigger>
-      </TabsList>
-      <TabsContent value="short_term" className="w-full">
-        <ArtistList artists={artists_short} />
-      </TabsContent>
-      <TabsContent value="medium_term" className="w-full">
-        <ArtistList artists={artists_medium} />
-      </TabsContent>
-      <TabsContent value="long_term" className="w-full">
-        <ArtistList artists={artists_long} />
-      </TabsContent>
-    </Tabs>
+    <div className="w-screen md:w-1/2 xl:w-1/3">
+      {" "}
+      <Tabs defaultValue="short_term" className="">
+        <TabsList className="w-full">
+          <TabsTrigger value="short_term" className="w-1/3">
+            1 Month
+          </TabsTrigger>
+          <TabsTrigger value="medium_term" className="w-1/3">
+            6 Months
+          </TabsTrigger>
+          <TabsTrigger value="long_term" className="w-1/3">
+            12 Months
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="short_term" className="w-full">
+          <ArtistList artists={artists_short} />
+        </TabsContent>
+        <TabsContent value="medium_term" className="w-full">
+          <ArtistList artists={artists_medium} />
+        </TabsContent>
+        <TabsContent value="long_term" className="w-full">
+          <ArtistList artists={artists_long} />
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 }
