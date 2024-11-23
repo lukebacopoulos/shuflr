@@ -1,21 +1,30 @@
-import { getTopArtists } from "@/lib/get-top-artists";
-import ArtistList from "./components/ArtistList";
+import { getTopItems } from "@/lib/get-top-items";
+import ArtistTabs from "./components/ArtistTabs";
 
 export default async function TopArtistsPage() {
-  let artists;
+  let artists_long, artists_medium, artists_short;
 
   try {
-    const data = await getTopArtists();
-    artists = data.items || [];
+    const data_long = await getTopItems("artists", "long_term");
+    artists_long = data_long.items || [];
+
+    const data_medium = await getTopItems("artists", "medium_term");
+    artists_medium = data_medium.items || [];
+
+    const data_short = await getTopItems("artists", "short_term");
+    artists_short = data_short.items || [];
   } catch (error) {
     console.error("Error fetching artists:", error);
     // Optionally, handle error UI or logging here
   }
 
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-8">Your Top Spotify Artists</h1>
-      <ArtistList artists={artists} />
+    <div className="flex justify-center items-center h-screen">
+      <ArtistTabs
+        artists_short={artists_short}
+        artists_medium={artists_medium}
+        artists_long={artists_long}
+      ></ArtistTabs>
     </div>
   );
 }

@@ -13,6 +13,7 @@ export default function Header() {
     <div className="p-8 flex justify-between items-center">
       <Link href="/">Shuflr</Link>
       <Link href="/top-artists">Top Artists</Link>
+      <Link href="/top-tracks">Top Tracks</Link>
       <div className="flex w-1/6 justify-between">
         <SignedOut>
           <SignInButton />
