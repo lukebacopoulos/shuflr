@@ -23,7 +23,7 @@ interface ArtistListProps {
 export default function ArtistList({ artists }: ArtistListProps) {
   return (
     <div className="flex justify-center items-center">
-      <ScrollArea className="h-[700px] w-full">
+      <ScrollArea className="h-[500px] w-full">
         <Table className="">
           <TableBody>
             {artists.map((artist, index) => (
@@ -50,7 +50,7 @@ export default function ArtistList({ artists }: ArtistListProps) {
                       <img
                         src={artist.images[0].url} // Use the first image URL
                         alt={`${artist.name}'s image`}
-                        className="w-12 h-12 md:w-20 md:h-20 object-cover rounded-full mr-4"
+                        className="w-8 h-8 md:w-20 md:h-20 object-cover rounded-full mr-4"
                       />
                     </Link>
                   ) : (
