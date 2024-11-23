@@ -10,11 +10,13 @@ import {
 
 export default function Header() {
   return (
-    <div className="p-8 flex justify-between items-center">
-      <Link href="/">Shuflr</Link>
-      <Link href="/top-artists">Top Artists</Link>
-      <Link href="/top-tracks">Top Tracks</Link>
-      <div className="flex w-1/6 justify-between">
+    <div className="p-8 flex flex-col md:flex-row justify-between items-center">
+      <div className="flex justify-evenly w-full md:pr-8">
+        <Link href="/">Shuflr</Link>
+        <Link href="/top-artists">Top Artists</Link>
+        <Link href="/top-tracks">Top Tracks</Link>
+      </div>
+      <div className="flex w-auto mt-2">
         <SignedOut>
           <SignInButton />
         </SignedOut>
@@ -22,8 +24,8 @@ export default function Header() {
           <SignOutButton />
         </SignedIn>
         <UserButton />
+        <ModeToggle />
       </div>
-      <ModeToggle />
     </div>
   );
 }

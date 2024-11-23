@@ -1,5 +1,11 @@
 import { getTopItems } from "@/lib/get-top-items";
 import ArtistTabs from "./components/ArtistTabs";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Shuflr | Your Top Artists.",
+  description: "Your top artists.",
+};
 
 export default async function TopArtistsPage() {
   let artists_long, artists_medium, artists_short;
