@@ -43,6 +43,7 @@ export default function TrackList({ tracks }: TrackListProps) {
         description:
           "The track has been successfully added to the Spotify queue.",
         variant: "default",
+        duration: 1000,
       });
     } catch (error) {
       console.error("Failed to add track to queue:", error);
