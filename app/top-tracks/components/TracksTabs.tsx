@@ -3,6 +3,7 @@ import TrackList from "./TracksList";
 interface Track {
   id: string;
   name: string;
+  uri: string;
   external_urls: {
     spotify: string;
   };
@@ -32,7 +33,7 @@ export default function TrackTabs({
   tracks_long,
 }: TrackTabsProps) {
   return (
-    <div className="w-4/5 md:w-1/2 xl:w-1/3">
+    <div className="w-4/5 md:w-1/2">
       {" "}
       <Tabs defaultValue="short_term" className="">
         <TabsList className="w-full">

@@ -22,40 +22,38 @@ interface ArtistListProps {
 
 export default function ArtistList({ artists }: ArtistListProps) {
   return (
-    <div className="flex justify-center items-center">
-      <ScrollArea className="h-[500px] w-full">
+    <div className="flex items-center justify-center">
+      <ScrollArea className="h-[500px] w-full md:h-[700px]">
         <Table className="">
           <TableBody>
             {artists.map((artist, index) => (
               <TableRow key={artist.id}>
-                <TableCell className="text-center font-large md:text-lg ">
+                <TableCell className="font-large text-center md:text-lg">
                   {index + 1}.
                 </TableCell>
-                <TableCell>
-                  <Link
-                    href={artist.external_urls.spotify}
-                    className="hover:text-blue-500 hover:underline text-md pl-10 md:text-xl"
-                    target="_blank"
-                  >
-                    {artist.name}
-                  </Link>
-                </TableCell>
-                <TableCell className="h-auto flex justify-end">
+                <TableCell className="w-1/6 md:w-1/4 lg:w-1/5 xl:w-1/6">
                   {artist.images.length > 0 ? (
                     <Link
                       href={artist.external_urls.spotify}
-                      className="hover:text-blue-500 hover:underline text-lg pl-10 md:text-xl"
+                      className="text-lg hover:text-blue-500 hover:underline md:text-xl"
                       target="_blank"
                     >
                       <img
                         src={artist.images[0].url} // Use the first image URL
                         alt={`${artist.name}'s image`}
-                        className="w-8 h-8 md:w-20 md:h-20 rounded-full mr-4"
+                        className="h-8 w-8 rounded-md md:h-20 md:w-20"
                       />
                     </Link>
-                  ) : (
-                    "No image available"
-                  )}
+                  ) : null}
+                </TableCell>
+                <TableCell>
+                  <Link
+                    href={artist.external_urls.spotify}
+                    className="text-md hover:text-blue-500 hover:underline md:text-xl"
+                    target="_blank"
+                  >
+                    {artist.name}
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}
