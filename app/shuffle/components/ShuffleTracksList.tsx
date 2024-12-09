@@ -54,7 +54,11 @@ export default function ShuffleTrackList({
   const [tracks, setTracks] = useState<SpotifyTrack[]>(
     initialTracks.filter(Boolean),
   );
-  const [selectedTracks, setSelectedTracks] = useState<Set<string>>(new Set());
+  //const [selectedTracks, setSelectedTracks] = useState<Set<string>>(new Set()); // start with empty selection
+  const [selectedTracks, setSelectedTracks] = useState<Set<string>>( //start with select all
+    new Set(initialTracks.filter(Boolean).map((track) => track.id)),
+  );
+
   const [isQueueing, setIsQueueing] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const router = useRouter();
@@ -104,9 +108,7 @@ export default function ShuffleTrackList({
     {
       toast,
     }: {
-      toast: ({
-        ...props
-      }: {
+      toast: (props: {
         title?: string;
         description?: string;
         variant?: "default" | "destructive";
@@ -124,8 +126,46 @@ export default function ShuffleTrackList({
       const tracksToQueue = tracks.filter((track) =>
         selectedTracks.has(track.id),
       );
+
       for (const track of tracksToQueue) {
-        await pushToQueue(track.uri);
+        try {
+          await pushToQueue(track.uri);
+        } catch (error) {
+          // Convert error to string and check for specific error messages
+          const errorMessage =
+            error instanceof Error ? error.message : String(error);
+
+          if (errorMessage.includes("NO_ACTIVE_DEVICE")) {
+            toast({
+              title: "No Active Device",
+              description:
+                "Please open Spotify and start playing something first.",
+              variant: "destructive",
+              duration: 5000,
+            });
+            return;
+          }
+
+          if (errorMessage.includes("403")) {
+            toast({
+              title: "Premium Required",
+              description:
+                "Queueing tracks requires a Spotify Premium subscription.",
+              variant: "destructive",
+              duration: 5000,
+            });
+            return;
+          }
+
+          // Generic error handling
+          toast({
+            title: "Queue Failed",
+            description: "Could not add tracks to queue. Please try again.",
+            variant: "destructive",
+            duration: 5000,
+          });
+          return;
+        }
       }
 
       toast({
@@ -135,38 +175,11 @@ export default function ShuffleTrackList({
         duration: 2000,
       });
     } catch (error) {
-      console.error("Failed to add selected tracks to queue:", error);
-      toast({
-        title: "Queue Failed",
-        description:
-          "Could not add selected tracks to the Spotify queue. Please try again.",
-        variant: "destructive",
-      });
+      console.error("Failed to add tracks to queue:", error);
     } finally {
       setIsQueueing(false);
+      setIsDialogOpen(false);
     }
-  };
-
-  const handleRemoveSelected = () => {
-    const remainingTracks = tracks.filter(
-      (track) => !selectedTracks.has(track.id),
-    );
-    setTracks(remainingTracks);
-    setSelectedTracks(new Set()); // Clear selections after removal
-
-    toast({
-      title: "Tracks Removed",
-      description: `Removed ${tracks.length - remainingTracks.length} tracks from the list.`,
-      variant: "destructive",
-      duration: 1000,
-    });
-  };
-
-  const handleShuffle = () => {
-    // Filter out any null tracks before shuffling
-    const validTracks = initialTracks.filter(Boolean);
-    const shuffled = shuffleTracks(validTracks);
-    setTracks(shuffled);
   };
 
   const handleQueue = async (trackUri: string) => {
@@ -180,14 +193,59 @@ export default function ShuffleTrackList({
         duration: 1000,
       });
     } catch (error) {
-      console.error("Failed to add track to queue:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+
+      if (errorMessage.includes("NO_ACTIVE_DEVICE")) {
+        toast({
+          title: "No Active Device",
+          description: "Please open Spotify and start playing something first.",
+          variant: "destructive",
+          duration: 5000,
+        });
+        return;
+      }
+
+      if (errorMessage.includes("403")) {
+        toast({
+          title: "Premium Required",
+          description:
+            "Queueing tracks requires a Spotify Premium subscription.",
+          variant: "destructive",
+          duration: 5000,
+        });
+        return;
+      }
+
       toast({
         title: "Failed to Add Track",
-        description:
-          "Could not add the track to the Spotify queue. Please try again.",
+        description: "Could not add the track to queue. Please try again.",
         variant: "destructive",
+        duration: 5000,
       });
     }
+  };
+
+  const handleRemoveSelected = () => {
+    const remainingTracks = tracks.filter(
+      (track) => !selectedTracks.has(track.id),
+    );
+    setTracks(remainingTracks);
+    setSelectedTracks(new Set()); // Clear selections after removal
+
+    toast({
+      title: "Tracks Removed",
+      description: `Removed ${tracks.length - remainingTracks.length} tracks from the list.`,
+      variant: "default",
+      duration: 1000,
+    });
+  };
+
+  const handleShuffle = () => {
+    // Filter out any null tracks before shuffling
+    const validTracks = initialTracks.filter(Boolean);
+    const shuffled = shuffleTracks(validTracks);
+    setTracks(shuffled);
   };
 
   const navigateBack = () => {
@@ -197,7 +255,7 @@ export default function ShuffleTrackList({
   return (
     <div className="flex flex-col items-center justify-center space-y-4">
       <div className="mb-8 flex w-4/5 justify-evenly rounded-lg bg-secondary p-4 px-8">
-        <TooltipProvider>
+        <TooltipProvider delayDuration={25}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button onClick={navigateBack} className="bg-foreground">
@@ -282,7 +340,7 @@ export default function ShuffleTrackList({
 
       <div className="relative h-[500px] w-4/5 overflow-hidden rounded-lg md:h-[700px]">
         <div className="sticky top-0 z-10 w-full bg-secondary">
-          <Table className="rounded-t-lg border-0">
+          <Table className="rounded-t-lg border-0 bg-opacity-50">
             <TableHeader className="rounded-t-lg [&_tr]:border-b-0">
               <TableRow className="border-0">
                 <TableCell className="w-12 pl-4">
@@ -297,7 +355,7 @@ export default function ShuffleTrackList({
                 >
                   {selectedTracks.size > 0
                     ? `${selectedTracks.size} Selected`
-                    : ""}
+                    : "Select All"}
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -360,12 +418,21 @@ export default function ShuffleTrackList({
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Button
-                      onClick={() => track && handleQueue(track.uri)}
-                      className="mr-4 w-10 bg-foreground"
-                    >
-                      <ListEndIcon size={20} />
-                    </Button>
+                    <TooltipProvider delayDuration={30}>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Button
+                            onClick={() => track && handleQueue(track.uri)}
+                            className="mr-4 w-10 bg-foreground"
+                          >
+                            <ListEndIcon size={20} />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent className="mb-2">
+                          <p>Add single item to queue</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </TableCell>
                 </TableRow>
               ))}
