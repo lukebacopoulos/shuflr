@@ -35,7 +35,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { type ToastProps } from "@/components/ui/toast";
 interface TrackListProps {
   tracks: SpotifyTrack[];
 }
