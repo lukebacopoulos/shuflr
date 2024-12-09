@@ -27,6 +27,10 @@ export default async function TopTracksPage() {
   return (
     <>
       <div className="mb-20 mt-20 flex min-h-screen flex-col items-center">
+        <strong className="mb-6">
+          Note: Currently, adding items to queue will not work unless you are
+          actively playing music on Spotify.
+        </strong>
         <h1 className="pb-4 text-4xl">Your Top Tracks.</h1>
         <TrackTabs
           tracks_short={track_short}
