@@ -131,11 +131,17 @@ export default function ShuffleTrackList({
         try {
           await pushToQueue(track.uri);
         } catch (error) {
-          // Convert error to string and check for specific error messages
-          const errorMessage =
-            error instanceof Error ? error.message : String(error);
+          // Convert error to string and normalize it
+          const errorStr = JSON.stringify(error);
+          console.log("Queue Error:", errorStr); // For debugging
 
-          if (errorMessage.includes("NO_ACTIVE_DEVICE")) {
+          // Check for no active device in various error formats
+          if (
+            errorStr.includes("NO_ACTIVE_DEVICE") ||
+            errorStr.includes("No active device found") ||
+            (error instanceof Error &&
+              error.message.includes("No active device"))
+          ) {
             toast({
               title: "No Active Device",
               description:
@@ -146,7 +152,11 @@ export default function ShuffleTrackList({
             return;
           }
 
-          if (errorMessage.includes("403")) {
+          // Check for premium required
+          if (
+            errorStr.includes("403") ||
+            errorStr.includes("Premium required")
+          ) {
             toast({
               title: "Premium Required",
               description:
@@ -193,10 +203,14 @@ export default function ShuffleTrackList({
         duration: 1000,
       });
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorStr = JSON.stringify(error);
+      console.log("Queue Error:", errorStr); // For debugging
 
-      if (errorMessage.includes("NO_ACTIVE_DEVICE")) {
+      if (
+        errorStr.includes("NO_ACTIVE_DEVICE") ||
+        errorStr.includes("No active device found") ||
+        (error instanceof Error && error.message.includes("No active device"))
+      ) {
         toast({
           title: "No Active Device",
           description: "Please open Spotify and start playing something first.",
@@ -206,7 +220,7 @@ export default function ShuffleTrackList({
         return;
       }
 
-      if (errorMessage.includes("403")) {
+      if (errorStr.includes("403") || errorStr.includes("Premium required")) {
         toast({
           title: "Premium Required",
           description:
