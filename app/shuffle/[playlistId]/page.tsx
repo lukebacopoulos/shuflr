@@ -1,6 +1,41 @@
 import { getPlaylistTracks } from "@/lib/get-playlist-tracks";
 import shuffleTracks from "@/lib/shuffle-tracks";
 import ShuffleTrackList from "../components/ShuffleTracksList";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Shuflr | True Shuffle.",
+  description: "Shuffle with randomness.",
+};
+
+interface Artist {
+  id: string;
+  name: string;
+  external_urls: {
+    spotify: string;
+  };
+}
+
+interface Album {
+  images: { url: string }[];
+}
+
+interface Track {
+  id: string;
+  name: string;
+  uri: string;
+  external_urls: {
+    spotify: string;
+  };
+  album: Album;
+  artists: Artist[];
+}
+
+interface PlaylistTrackData {
+  items: {
+    track: Track;
+  }[];
+}
 
 export default async function Page({
   params,
@@ -14,9 +49,9 @@ export default async function Page({
     return null;
   }
 
-  const data = await getPlaylistTracks(playlistId);
-  const tracks = data.items.map((item: any) => item.track);
-  let shuffledTracks = shuffleTracks(tracks);
+  const data: PlaylistTrackData = await getPlaylistTracks(playlistId);
+  const tracks = data.items.map((item) => item.track);
+  const shuffledTracks = shuffleTracks(tracks);
 
   return (
     <>

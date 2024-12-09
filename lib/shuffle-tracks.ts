@@ -1,4 +1,25 @@
-export default function shuffleTracks(tracks: any[]): any[] {
+interface Track {
+  id: string;
+  name: string;
+  uri: string;
+  external_urls: {
+    spotify: string;
+  };
+  album: {
+    images: {
+      url: string;
+    }[];
+  };
+  artists: {
+    id: string;
+    name: string;
+    external_urls: {
+      spotify: string;
+    };
+  }[];
+}
+
+export default function shuffleTracks(tracks: Track[]): Track[] {
   // Clone the tracks array to avoid mutating the original array
   const shuffledTracks = [...tracks];
 

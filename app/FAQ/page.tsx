@@ -9,14 +9,14 @@ export default function Page() {
         data.
       </p>
       <strong className="mb-4 mt-16 text-2xl">
-        Is Spotify's shufling algorithm not random?
+        Is Spotify&apos;s shufling algorithm not random?
       </strong>
       <p>
         No it is not. Spotify utilizes reccomendation engines in their shuffling
         algorithms to queue songs that it THINKS you want to hear.
       </p>
       <strong className="mb-4 mt-16 text-2xl">
-        How does shuflr's algorithm work?
+        How does shuflr&apos;s algorithm work?
       </strong>
       <p>
         shuflr employs a simple Fisher-Yates shuffling algorithm. Simplicity is
