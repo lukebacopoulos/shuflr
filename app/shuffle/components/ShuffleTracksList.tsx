@@ -132,35 +132,37 @@ export default function ShuffleTrackList({
           await pushToQueue(track.uri);
         } catch (error) {
           console.log("Full error:", error);
-          console.log("Error type:", typeof error);
-          console.log(
-            "Error message:",
-            error instanceof Error ? error.message : "Not an Error instance",
-          );
 
-          // Try to parse the error message if it's a string containing JSON
-          let errorObj;
+          let reason = null;
           if (error instanceof Error) {
             try {
-              errorObj = JSON.parse(
-                error.message.substring(error.message.indexOf("{")),
-              );
+              // Extract the JSON part from the error message
+              const jsonMatch = error.message.match(/\{[\s\S]*\}/);
+              if (jsonMatch) {
+                const errorObj = JSON.parse(jsonMatch[0]);
+                reason = errorObj.error?.reason;
+              }
             } catch {
               // Ignore parsing errors
-              errorObj = null;
             }
           }
 
-          // Check for no active device in the parsed error object
-          if (
-            errorObj?.error?.reason === "NO_ACTIVE_DEVICE" ||
-            (error instanceof Error &&
-              error.message.includes("NO_ACTIVE_DEVICE"))
-          ) {
+          if (reason === "NO_ACTIVE_DEVICE") {
             toast({
               title: "No Active Device",
               description:
                 "Please open Spotify and start playing something first.",
+              variant: "destructive",
+              duration: 5000,
+            });
+            return;
+          }
+
+          if (reason === "PREMIUM_REQUIRED") {
+            toast({
+              title: "Premium Required",
+              description:
+                "Queueing tracks requires a Spotify Premium subscription.",
               variant: "destructive",
               duration: 5000,
             });
@@ -203,31 +205,35 @@ export default function ShuffleTrackList({
       });
     } catch (error) {
       console.log("Full error:", error);
-      console.log("Error type:", typeof error);
-      console.log(
-        "Error message:",
-        error instanceof Error ? error.message : "Not an Error instance",
-      );
 
-      let errorObj;
+      let reason = null;
       if (error instanceof Error) {
         try {
-          errorObj = JSON.parse(
-            error.message.substring(error.message.indexOf("{")),
-          );
+          const jsonMatch = error.message.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            const errorObj = JSON.parse(jsonMatch[0]);
+            reason = errorObj.error?.reason;
+          }
         } catch {
           // Ignore parsing errors
-          errorObj = null;
         }
       }
 
-      if (
-        errorObj?.error?.reason === "NO_ACTIVE_DEVICE" ||
-        (error instanceof Error && error.message.includes("NO_ACTIVE_DEVICE"))
-      ) {
+      if (reason === "NO_ACTIVE_DEVICE") {
         toast({
           title: "No Active Device",
           description: "Please open Spotify and start playing something first.",
+          variant: "destructive",
+          duration: 5000,
+        });
+        return;
+      }
+
+      if (reason === "PREMIUM_REQUIRED") {
+        toast({
+          title: "Premium Required",
+          description:
+            "Queueing tracks requires a Spotify Premium subscription.",
           variant: "destructive",
           duration: 5000,
         });
