@@ -69,7 +69,7 @@ export default function Header() {
               <SignInButton>
                 <Button
                   variant="outline"
-                  className="border-muted-foreground bg-secondary"
+                  className="border-muted-foreground bg-secondary hover:bg-slate-500"
                 >
                   Sign In
                 </Button>
@@ -79,7 +79,7 @@ export default function Header() {
               <SignOutButton>
                 <Button
                   variant="outline"
-                  className="border-muted-foreground bg-secondary hover:bg-slate-500"
+                  className="hidden border-muted-foreground bg-secondary hover:bg-slate-500 lg:block"
                 >
                   Sign Out
                 </Button>

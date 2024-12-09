@@ -110,7 +110,7 @@ export default function TrackList({ tracks }: TrackListProps) {
                 <TableCell>
                   <Button
                     onClick={() => handleQueue(track.uri)}
-                    className="mr-4 w-10 bg-slate-600"
+                    className="mr-4 w-10 bg-foreground"
                   >
                     <ListEndIcon size={20} />
                   </Button>

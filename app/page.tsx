@@ -15,6 +15,7 @@ export default function Home() {
             width={500}
             height={300}
           />
+          <h2 className="my-8 text-2xl md:text-4xl">Work in progress. </h2>
           <SignedOut>
             <h2 className="my-8 text-2xl md:text-4xl">
               Sign in to get started.

@@ -56,7 +56,7 @@ export default async function Page({
   return (
     <>
       <div className="mb-20 mt-20 flex w-full flex-col items-center justify-center rounded-lg">
-        <strong className="mb-6">
+        <strong className="mb-6 px-4">
           Note: Currently, adding items to queue will not work unless you are
           actively playing music on Spotify.
         </strong>

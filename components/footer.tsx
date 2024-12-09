@@ -5,6 +5,8 @@ export default function Footer() {
       <Link href="https://github.com/lukebacopoulos/shuflr" target="_blank">
         GitHub
       </Link>
+      <p>© Shuflr 2024</p>
+      <Link href="/">License</Link>
       {/* <Link href="/">License</Link> */}
       <Link href="/FAQ">FAQ</Link>
     </footer>
