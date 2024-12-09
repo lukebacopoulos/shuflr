@@ -35,9 +35,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
+import { type ToastProps } from "@/components/ui/toast";
 interface TrackListProps {
   tracks: SpotifyTrack[];
+}
+
+interface ToasterToast {
+  id: string;
+  title?: string;
+  description?: string;
+  variant?: "default" | "destructive";
+  duration?: number;
 }
 
 export default function ShuffleTrackList({
@@ -67,7 +75,7 @@ export default function ShuffleTrackList({
   };
 
   const handleQueueConfirm = async () => {
-    await handleQueueSelected(tracks, selectedTracks, toast, setIsQueueing);
+    await handleQueueSelected(tracks, selectedTracks, { toast }, setIsQueueing);
     setIsDialogOpen(false);
   };
 
@@ -94,7 +102,22 @@ export default function ShuffleTrackList({
   const handleQueueSelected = async (
     tracks: SpotifyTrack[],
     selectedTracks: Set<string>,
-    toast: any,
+    {
+      toast,
+    }: {
+      toast: ({
+        ...props
+      }: {
+        title?: string;
+        description?: string;
+        variant?: "default" | "destructive";
+        duration?: number;
+      }) => {
+        id: string;
+        dismiss: () => void;
+        update: (props: ToasterToast) => void;
+      };
+    },
     setIsQueueing: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
     try {
