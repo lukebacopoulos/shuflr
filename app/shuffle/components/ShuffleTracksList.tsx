@@ -131,36 +131,36 @@ export default function ShuffleTrackList({
         try {
           await pushToQueue(track.uri);
         } catch (error) {
-          // Convert error to string and normalize it
-          const errorStr = JSON.stringify(error);
-          console.log("Queue Error:", errorStr); // For debugging
+          // Log the full error object and its properties
+          console.log("Full error:", error);
+          console.log("Error type:", typeof error);
+          console.log(
+            "Error message:",
+            error instanceof Error ? error.message : "Not an Error instance",
+          );
 
-          // Check for no active device in various error formats
+          // Try to parse the error message if it's a string containing JSON
+          let errorObj;
+          if (error instanceof Error) {
+            try {
+              errorObj = JSON.parse(
+                error.message.substring(error.message.indexOf("{")),
+              );
+            } catch (e) {
+              errorObj = null;
+            }
+          }
+
+          // Check for no active device in the parsed error object
           if (
-            errorStr.includes("NO_ACTIVE_DEVICE") ||
-            errorStr.includes("No active device found") ||
+            errorObj?.error?.reason === "NO_ACTIVE_DEVICE" ||
             (error instanceof Error &&
-              error.message.includes("No active device"))
+              error.message.includes("NO_ACTIVE_DEVICE"))
           ) {
             toast({
               title: "No Active Device",
               description:
                 "Please open Spotify and start playing something first.",
-              variant: "destructive",
-              duration: 5000,
-            });
-            return;
-          }
-
-          // Check for premium required
-          if (
-            errorStr.includes("403") ||
-            errorStr.includes("Premium required")
-          ) {
-            toast({
-              title: "Premium Required",
-              description:
-                "Queueing tracks requires a Spotify Premium subscription.",
               variant: "destructive",
               duration: 5000,
             });
@@ -203,13 +203,27 @@ export default function ShuffleTrackList({
         duration: 1000,
       });
     } catch (error) {
-      const errorStr = JSON.stringify(error);
-      console.log("Queue Error:", errorStr); // For debugging
+      console.log("Full error:", error);
+      console.log("Error type:", typeof error);
+      console.log(
+        "Error message:",
+        error instanceof Error ? error.message : "Not an Error instance",
+      );
+
+      let errorObj;
+      if (error instanceof Error) {
+        try {
+          errorObj = JSON.parse(
+            error.message.substring(error.message.indexOf("{")),
+          );
+        } catch (e) {
+          errorObj = null;
+        }
+      }
 
       if (
-        errorStr.includes("NO_ACTIVE_DEVICE") ||
-        errorStr.includes("No active device found") ||
-        (error instanceof Error && error.message.includes("No active device"))
+        errorObj?.error?.reason === "NO_ACTIVE_DEVICE" ||
+        (error instanceof Error && error.message.includes("NO_ACTIVE_DEVICE"))
       ) {
         toast({
           title: "No Active Device",
@@ -220,22 +234,10 @@ export default function ShuffleTrackList({
         return;
       }
 
-      if (errorStr.includes("403") || errorStr.includes("Premium required")) {
-        toast({
-          title: "Premium Required",
-          description:
-            "Queueing tracks requires a Spotify Premium subscription.",
-          variant: "destructive",
-          duration: 5000,
-        });
-        return;
-      }
-
       toast({
         title: "Failed to Add Track",
         description: "Could not add the track to queue. Please try again.",
         variant: "destructive",
-        duration: 5000,
       });
     }
   };
