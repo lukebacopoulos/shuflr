@@ -13,7 +13,7 @@ import Image from "next/image";
 
 export default function Header() {
   return (
-    <header className="sticky bg-background shadow-md">
+    <header className="sticky bg-background">
       <div className="container mx-auto mt-8 grid h-[80px] grid-rows-2 gap-4 md:mt-0 md:grid-cols-3">
         {/* Logo (takes 2 columns) */}
         <Link
@@ -40,18 +40,21 @@ export default function Header() {
               className="md:hidden"
             />
           </Link>
-          <Link href="/shuffle" className="whitespace-nowrap hover:underline">
+          <Link
+            href="/shuffle"
+            className="whitespace-nowrap transition-all ease-in-out hover:text-xl hover:underline"
+          >
             Shuffle
           </Link>
           <Link
             href="/top-tracks"
-            className="whitespace-nowrap hover:underline"
+            className="whitespace-nowrap transition-all ease-in-out hover:text-xl hover:underline"
           >
             Top Tracks
           </Link>
           <Link
             href="/top-artists"
-            className="whitespace-nowrap hover:underline"
+            className="whitespace-nowrap transition-all ease-in-out hover:text-xl hover:underline"
           >
             Top Artists
           </Link>

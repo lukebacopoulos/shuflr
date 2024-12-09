@@ -40,7 +40,7 @@ export default function PlaylistList({ playlists }: PlaylistListProps) {
                 const safeImageUrl = playlist?.images?.[0]?.url;
 
                 return (
-                  <TableRow key={safeId}>
+                  <TableRow key={safeId} className="border-0">
                     <TableCell className="font-large text-center md:text-lg">
                       {index + 1}.
                     </TableCell>
