@@ -131,7 +131,6 @@ export default function ShuffleTrackList({
         try {
           await pushToQueue(track.uri);
         } catch (error) {
-          // Log the full error object and its properties
           console.log("Full error:", error);
           console.log("Error type:", typeof error);
           console.log(
@@ -146,7 +145,8 @@ export default function ShuffleTrackList({
               errorObj = JSON.parse(
                 error.message.substring(error.message.indexOf("{")),
               );
-            } catch (e) {
+            } catch {
+              // Ignore parsing errors
               errorObj = null;
             }
           }
@@ -167,7 +167,6 @@ export default function ShuffleTrackList({
             return;
           }
 
-          // Generic error handling
           toast({
             title: "Queue Failed",
             description: "Could not add tracks to queue. Please try again.",
@@ -216,7 +215,8 @@ export default function ShuffleTrackList({
           errorObj = JSON.parse(
             error.message.substring(error.message.indexOf("{")),
           );
-        } catch (e) {
+        } catch {
+          // Ignore parsing errors
           errorObj = null;
         }
       }
