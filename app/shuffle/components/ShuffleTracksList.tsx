@@ -6,6 +6,12 @@ import { ListEndIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { pushToQueue } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
+import shuffleTracks from "@/lib/shuffle-tracks";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+import { Shuffle } from "lucide-react";
+import { ArrowBigRight } from "lucide-react";
 
 interface Track {
   id: string;
@@ -32,8 +38,41 @@ interface TrackListProps {
   tracks: Track[];
 }
 
-export default function TrackList({ tracks }: TrackListProps) {
+export default function ShuffleTrackList({
+  tracks: initialTracks,
+}: TrackListProps) {
   const { toast } = useToast();
+  const [tracks, setTracks] = useState(initialTracks);
+  const router = useRouter();
+
+  const handleShuffle = () => {
+    const shuffled = shuffleTracks(initialTracks);
+    setTracks(shuffled);
+  };
+
+  const handleBulkQueue = async () => {
+    try {
+      // Queue tracks sequentially to maintain order
+      for (const track of tracks) {
+        await pushToQueue(track.uri);
+      }
+
+      toast({
+        title: "Playlist Queued!",
+        description: `Added ${tracks.length} tracks to the Spotify queue.`,
+        variant: "default",
+        duration: 2000,
+      });
+    } catch (error) {
+      console.error("Failed to add tracks to queue:", error);
+      toast({
+        title: "Queue Failed",
+        description:
+          "Could not add all tracks to the Spotify queue. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleQueue = async (trackUri: string) => {
     try {
@@ -56,9 +95,24 @@ export default function TrackList({ tracks }: TrackListProps) {
     }
   };
 
+  const navigateBack = () => {
+    router.push("/shuffle"); // Navigate to /shuffle
+  };
+
   return (
-    <div className="flex items-center justify-center">
-      <ScrollArea className="h-[500px] w-full md:h-[700px]">
+    <div className="flex flex-col items-center justify-center space-y-4">
+      <div className="mb-8 flex w-full justify-evenly rounded-lg bg-secondary p-4 px-8">
+        <Button onClick={navigateBack} className="bg-slate-400">
+          <ArrowLeft />
+        </Button>
+        <Button onClick={handleShuffle} className="bg-slate-400">
+          <Shuffle />
+        </Button>
+        <Button onClick={handleBulkQueue} className="bg-slate-400">
+          <ArrowBigRight />
+        </Button>
+      </div>
+      <ScrollArea className="h-[500px] w-full rounded-lg md:h-[700px]">
         <Table className="bg-secondary">
           <TableBody>
             {tracks.map((track, index) => (
@@ -67,7 +121,7 @@ export default function TrackList({ tracks }: TrackListProps) {
                   {index + 1}.
                 </TableCell>
                 <TableCell className="w-1/6 md:w-1/4 xl:w-1/3 xl:px-12 2xl:w-1/5">
-                  {track.album.images.length > 0 ? (
+                  {track?.album.images.length > 0 ? (
                     <Link
                       href={track.external_urls.spotify}
                       target="_blank"
@@ -110,7 +164,7 @@ export default function TrackList({ tracks }: TrackListProps) {
                 <TableCell>
                   <Button
                     onClick={() => handleQueue(track.uri)}
-                    className="mr-4 w-10 bg-slate-600"
+                    className="mr-4 w-10 bg-slate-400"
                   >
                     <ListEndIcon size={20} />
                   </Button>

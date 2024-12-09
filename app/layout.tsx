@@ -6,6 +6,8 @@ import Header from "@/components/header";
 import { ClerkProvider, ClerkLoading, ClerkLoaded } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Toaster } from "@/components/ui/toaster";
+import Footer from "@/components/footer";
+import LoadingPlaceHolder from "@/components/LoadingPlaceHolder";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -46,10 +48,11 @@ export default function RootLayout({
           >
             <Header />
             <ClerkLoading>
-              <div>Clerk is loading...</div>
+              <LoadingPlaceHolder />
             </ClerkLoading>
             <ClerkLoaded>{children}</ClerkLoaded>
             <Toaster />
+            <Footer />
           </ThemeProvider>
         </body>
       </html>

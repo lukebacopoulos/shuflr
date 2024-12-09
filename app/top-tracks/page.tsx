@@ -25,13 +25,15 @@ export default async function TopTracksPage() {
   }
 
   return (
-    <div className="flex flex-col mt-10 items-center h-screen">
-      <h1 className="text-4xl pb-4">Your Top Tracks.</h1>
-      <TrackTabs
-        tracks_short={track_short}
-        tracks_medium={track_medium}
-        tracks_long={tracks_long}
-      />
-    </div>
+    <>
+      <div className="mb-20 mt-20 flex min-h-screen flex-col items-center">
+        <h1 className="pb-4 text-4xl">Your Top Tracks.</h1>
+        <TrackTabs
+          tracks_short={track_short}
+          tracks_medium={track_medium}
+          tracks_long={tracks_long}
+        />
+      </div>
+    </>
   );
 }

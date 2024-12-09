@@ -23,11 +23,11 @@ interface ArtistListProps {
 export default function ArtistList({ artists }: ArtistListProps) {
   return (
     <div className="flex items-center justify-center">
-      <ScrollArea className="h-[500px] w-full md:h-[700px]">
+      <ScrollArea className="h-[500px] w-full rounded-lg bg-secondary md:h-[700px]">
         <Table className="">
           <TableBody>
             {artists.map((artist, index) => (
-              <TableRow key={artist.id}>
+              <TableRow key={artist.id} className="border-0">
                 <TableCell className="font-large text-center md:text-lg">
                   {index + 1}.
                 </TableCell>

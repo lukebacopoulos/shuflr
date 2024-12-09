@@ -25,8 +25,8 @@ export default async function TopArtistsPage() {
   }
 
   return (
-    <div className="flex flex-col mt-10 items-center h-screen">
-      <h1 className="text-4xl pb-4">Your Top Artists.</h1>
+    <div className="mb-20 mt-20 flex h-screen flex-col items-center">
+      <h1 className="pb-4 text-4xl">Your Top Artists.</h1>
       <ArtistTabs
         artists_short={artists_short}
         artists_medium={artists_medium}

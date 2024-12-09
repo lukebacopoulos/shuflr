@@ -2,8 +2,8 @@ import TopArtistSkeleton from "../top-artists/components/TopArtistSkeleton";
 
 export default function Loading() {
   return (
-    <div className="flex flex-col mt-10 items-center h-screen">
-      <h1 className="text-4xl pb-4">Your Top Tracks.</h1>
+    <div className="mt-20 flex h-screen flex-col items-center">
+      <h1 className="pb-4 text-4xl">Your Top Tracks.</h1>
       <TopArtistSkeleton />
     </div>
   );
