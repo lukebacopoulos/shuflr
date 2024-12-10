@@ -131,23 +131,18 @@ export default function ShuffleTrackList({
         try {
           await pushToQueue(track.uri);
         } catch (error) {
-          console.log("Full error:", error);
+          console.log("Queue error:", error);
 
-          let reason = null;
+          let errorData;
           if (error instanceof Error) {
             try {
-              // Extract the JSON part from the error message
-              const jsonMatch = error.message.match(/\{[\s\S]*\}/);
-              if (jsonMatch) {
-                const errorObj = JSON.parse(jsonMatch[0]);
-                reason = errorObj.error?.reason;
-              }
+              errorData = JSON.parse(error.message);
             } catch {
-              // Ignore parsing errors
+              errorData = { type: "UNKNOWN_ERROR", reason: "UNKNOWN_ERROR" };
             }
           }
 
-          if (reason === "NO_ACTIVE_DEVICE") {
+          if (errorData?.reason === "NO_ACTIVE_DEVICE") {
             toast({
               title: "No Active Device",
               description:
@@ -158,7 +153,7 @@ export default function ShuffleTrackList({
             return;
           }
 
-          if (reason === "PREMIUM_REQUIRED") {
+          if (errorData?.reason === "PREMIUM_REQUIRED") {
             toast({
               title: "Premium Required",
               description:
@@ -204,22 +199,19 @@ export default function ShuffleTrackList({
         duration: 1000,
       });
     } catch (error) {
-      console.log("Full error:", error);
+      console.log("Queue error:", error);
 
-      let reason = null;
+      let errorData;
       if (error instanceof Error) {
         try {
-          const jsonMatch = error.message.match(/\{[\s\S]*\}/);
-          if (jsonMatch) {
-            const errorObj = JSON.parse(jsonMatch[0]);
-            reason = errorObj.error?.reason;
-          }
+          errorData = JSON.parse(error.message);
         } catch {
-          // Ignore parsing errors
+          errorData = { type: "UNKNOWN_ERROR", reason: "UNKNOWN_ERROR" };
         }
       }
 
-      if (reason === "NO_ACTIVE_DEVICE") {
+      // Handle based on the error reason
+      if (errorData?.reason === "NO_ACTIVE_DEVICE") {
         toast({
           title: "No Active Device",
           description: "Please open Spotify and start playing something first.",
@@ -229,7 +221,7 @@ export default function ShuffleTrackList({
         return;
       }
 
-      if (reason === "PREMIUM_REQUIRED") {
+      if (errorData?.reason === "PREMIUM_REQUIRED") {
         toast({
           title: "Premium Required",
           description:
@@ -241,7 +233,7 @@ export default function ShuffleTrackList({
       }
 
       toast({
-        title: "Failed to Add Track",
+        title: "Queue Failed",
         description: "Could not add the track to queue. Please try again.",
         variant: "destructive",
       });
