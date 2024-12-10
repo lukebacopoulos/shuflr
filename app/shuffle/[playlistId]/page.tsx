@@ -56,10 +56,16 @@ export default async function Page({
   return (
     <>
       <div className="mb-20 mt-20 flex w-full flex-col items-center justify-center rounded-lg">
-        <strong className="mb-6 px-4">
+        <strong className="mb-2 px-4">
           Note: Currently, adding items to queue will not work unless you are
           actively playing music on Spotify.
         </strong>
+        <strong className="mb-2 px-4">
+          A Spotify premium membership is required for queue functionality.
+        </strong>
+        <p className="mb-6 px-4">
+          Error handling for these issues in progress.
+        </p>
         <ShuffleTrackList tracks={shuffledTracks} />
       </div>
     </>
