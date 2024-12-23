@@ -35,17 +35,19 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+
 interface TrackListProps {
   tracks: SpotifyTrack[];
 }
 
-interface ToasterToast {
-  id: string;
+type ToastParams = {
   title?: string;
   description?: string;
   variant?: "default" | "destructive";
   duration?: number;
-}
+};
+
+type ToastFunction = (props: ToastParams) => void;
 
 export default function ShuffleTrackList({
   tracks: initialTracks,
@@ -54,16 +56,13 @@ export default function ShuffleTrackList({
   const [tracks, setTracks] = useState<SpotifyTrack[]>(
     initialTracks.filter(Boolean),
   );
-  //const [selectedTracks, setSelectedTracks] = useState<Set<string>>(new Set()); // start with empty selection
-  const [selectedTracks, setSelectedTracks] = useState<Set<string>>( //start with select all
+  const [selectedTracks, setSelectedTracks] = useState<Set<string>>(
     new Set(initialTracks.filter(Boolean).map((track) => track.id)),
   );
-
   const [isQueueing, setIsQueueing] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const router = useRouter();
 
-  // Helper functions with null checks
   const getSpotifyUrl = (track: SpotifyTrack | null) => {
     if (!track) return "#";
     return (
@@ -77,48 +76,68 @@ export default function ShuffleTrackList({
     return track.album?.images?.[0]?.url || "/api/placeholder/80/80";
   };
 
-  const handleQueueConfirm = async () => {
-    await handleQueueSelected(tracks, selectedTracks, { toast }, setIsQueueing);
-    setIsDialogOpen(false);
-  };
+  const handleQueue = async (trackUri: string) => {
+    try {
+      console.log("Attempting to queue track:", trackUri);
+      await pushToQueue(trackUri);
 
-  const handleSelectTrack = (trackId: string) => {
-    setSelectedTracks((prev) => {
-      const newSelected = new Set(prev);
-      if (newSelected.has(trackId)) {
-        newSelected.delete(trackId);
-      } else {
-        newSelected.add(trackId);
+      toast({
+        title: "Track Added!",
+        description:
+          "The track has been successfully added to the Spotify queue.",
+        variant: "default",
+        duration: 1000,
+      });
+    } catch (error) {
+      console.log("=== Queue Error Details ===");
+      console.log("Original error:", error);
+
+      let errorData;
+      if (error instanceof Error) {
+        console.log("Error message:", error.message);
+        try {
+          errorData = JSON.parse(error.message);
+          console.log("Parsed error data:", errorData);
+        } catch (parseError) {
+          console.log("Failed to parse error as JSON:", parseError);
+          errorData = { type: "UNKNOWN_ERROR", reason: error.message };
+        }
       }
-      return newSelected;
-    });
-  };
 
-  const handleSelectAll = () => {
-    if (selectedTracks.size === tracks.length) {
-      setSelectedTracks(new Set());
-    } else {
-      setSelectedTracks(new Set(tracks.map((track) => track.id)));
+      if (errorData?.reason === "NO_ACTIVE_DEVICE") {
+        toast({
+          title: "No Active Device",
+          description: "Please open Spotify and start playing something first.",
+          variant: "destructive",
+          duration: 5000,
+        });
+        return;
+      }
+
+      if (errorData?.reason === "PREMIUM_REQUIRED") {
+        toast({
+          title: "Premium Required",
+          description:
+            "Queueing tracks requires a Spotify Premium subscription.",
+          variant: "destructive",
+          duration: 5000,
+        });
+        return;
+      }
+
+      toast({
+        title: "Queue Failed",
+        description: `Could not add the track to queue. Error: ${errorData?.reason || "Unknown error"}`,
+        variant: "destructive",
+        duration: 5000,
+      });
     }
   };
 
   const handleQueueSelected = async (
     tracks: SpotifyTrack[],
     selectedTracks: Set<string>,
-    {
-      toast,
-    }: {
-      toast: (props: {
-        title?: string;
-        description?: string;
-        variant?: "default" | "destructive";
-        duration?: number;
-      }) => {
-        id: string;
-        dismiss: () => void;
-        update: (props: ToasterToast) => void;
-      };
-    },
+    { toast }: { toast: ToastFunction },
     setIsQueueing: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
     try {
@@ -126,19 +145,25 @@ export default function ShuffleTrackList({
       const tracksToQueue = tracks.filter((track) =>
         selectedTracks.has(track.id),
       );
+      console.log(`Attempting to queue ${tracksToQueue.length} tracks`);
 
       for (const track of tracksToQueue) {
         try {
+          console.log(`Queueing track: ${track.name} (${track.uri})`);
           await pushToQueue(track.uri);
+          console.log(`Successfully queued track: ${track.name}`);
         } catch (error) {
-          console.log("Queue error:", error);
+          console.log(`=== Error Queueing Track: ${track.name} ===`);
+          console.log("Error details:", error);
 
           let errorData;
           if (error instanceof Error) {
             try {
               errorData = JSON.parse(error.message);
-            } catch {
-              errorData = { type: "UNKNOWN_ERROR", reason: "UNKNOWN_ERROR" };
+              console.log("Parsed error data:", errorData);
+            } catch (parseError) {
+              console.log("Failed to parse error message:", parseError);
+              errorData = { type: "UNKNOWN_ERROR", reason: error.message };
             }
           }
 
@@ -166,7 +191,7 @@ export default function ShuffleTrackList({
 
           toast({
             title: "Queue Failed",
-            description: "Could not add tracks to queue. Please try again.",
+            description: `Could not add tracks to queue. Error: ${errorData?.reason || "Unknown error"}`,
             variant: "destructive",
             duration: 5000,
           });
@@ -174,6 +199,7 @@ export default function ShuffleTrackList({
         }
       }
 
+      console.log("Successfully queued all selected tracks");
       toast({
         title: "Selected Tracks Queued!",
         description: `Added ${tracksToQueue.length} tracks to the Spotify queue.`,
@@ -188,56 +214,29 @@ export default function ShuffleTrackList({
     }
   };
 
-  const handleQueue = async (trackUri: string) => {
-    try {
-      await pushToQueue(trackUri);
-      toast({
-        title: "Track Added!",
-        description:
-          "The track has been successfully added to the Spotify queue.",
-        variant: "default",
-        duration: 1000,
-      });
-    } catch (error) {
-      console.log("Queue error:", error);
-
-      let errorData;
-      if (error instanceof Error) {
-        try {
-          errorData = JSON.parse(error.message);
-        } catch {
-          errorData = { type: "UNKNOWN_ERROR", reason: "UNKNOWN_ERROR" };
-        }
+  const handleSelectTrack = (trackId: string) => {
+    setSelectedTracks((prev) => {
+      const newSelected = new Set(prev);
+      if (newSelected.has(trackId)) {
+        newSelected.delete(trackId);
+      } else {
+        newSelected.add(trackId);
       }
+      return newSelected;
+    });
+  };
 
-      // Handle based on the error reason
-      if (errorData?.reason === "NO_ACTIVE_DEVICE") {
-        toast({
-          title: "No Active Device",
-          description: "Please open Spotify and start playing something first.",
-          variant: "destructive",
-          duration: 5000,
-        });
-        return;
-      }
-
-      if (errorData?.reason === "PREMIUM_REQUIRED") {
-        toast({
-          title: "Premium Required",
-          description:
-            "Queueing tracks requires a Spotify Premium subscription.",
-          variant: "destructive",
-          duration: 5000,
-        });
-        return;
-      }
-
-      toast({
-        title: "Queue Failed",
-        description: "Could not add the track to queue. Please try again.",
-        variant: "destructive",
-      });
+  const handleSelectAll = () => {
+    if (selectedTracks.size === tracks.length) {
+      setSelectedTracks(new Set());
+    } else {
+      setSelectedTracks(new Set(tracks.map((track) => track.id)));
     }
+  };
+
+  const handleQueueConfirm = async () => {
+    await handleQueueSelected(tracks, selectedTracks, { toast }, setIsQueueing);
+    setIsDialogOpen(false);
   };
 
   const handleRemoveSelected = () => {
@@ -245,7 +244,7 @@ export default function ShuffleTrackList({
       (track) => !selectedTracks.has(track.id),
     );
     setTracks(remainingTracks);
-    setSelectedTracks(new Set()); // Clear selections after removal
+    setSelectedTracks(new Set());
 
     toast({
       title: "Tracks Removed",
@@ -256,7 +255,6 @@ export default function ShuffleTrackList({
   };
 
   const handleShuffle = () => {
-    // Filter out any null tracks before shuffling
     const validTracks = initialTracks.filter(Boolean);
     const shuffled = shuffleTracks(validTracks);
     setTracks(shuffled);
@@ -432,7 +430,7 @@ export default function ShuffleTrackList({
                     </div>
                   </TableCell>
                   <TableCell>
-                    <TooltipProvider delayDuration={30}>
+                    <TooltipProvider delayDuration={80}>
                       <Tooltip>
                         <TooltipTrigger>
                           <Button

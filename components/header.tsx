@@ -10,7 +10,7 @@ import {
 
 import { Button } from "./ui/button";
 import Image from "next/image";
-
+import { FileQuestion } from "lucide-react";
 export default function Header() {
   return (
     <header className="sticky bg-background">
@@ -60,9 +60,7 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Profile Icon & Dark Mode Toggle (1 column) */}
         <div className="mx-4 flex items-center justify-end space-x-8 md:col-span-1 md:ml-40 md:mt-12 md:h-full md:justify-between">
-          {/* User Button and Sign In/Sign Out */}
           <div className="mr-4 flex items-center space-x-4">
             <UserButton />
             <SignedOut>
@@ -75,17 +73,14 @@ export default function Header() {
                 </Button>
               </SignInButton>
             </SignedOut>
-            <SignedIn>
-              <SignOutButton>
-                <Button
-                  variant="outline"
-                  className="hidden border-muted-foreground bg-secondary hover:bg-slate-500 lg:block"
-                >
-                  Sign Out
-                </Button>
-              </SignOutButton>
-            </SignedIn>
             <ModeToggle />
+            <Button
+              variant="outline"
+              size="icon"
+              className="ml-4 border-muted-foreground hover:bg-slate-500 dark:bg-secondary"
+            >
+              <FileQuestion className="h-[1.2rem] w-[1.2rem]" />
+            </Button>
           </div>
         </div>
       </div>

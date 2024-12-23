@@ -14,6 +14,14 @@ export default function Home() {
             alt={"shuflr logo"}
             width={500}
             height={300}
+            className="hidden dark:block"
+          />
+          <Image
+            src={"/logo-outline-cropped.svg"}
+            alt={"shuflr logo"}
+            width={500}
+            height={300}
+            className="block dark:hidden"
           />
           <h2 className="my-8 text-2xl md:text-4xl">Work in progress. </h2>
           <SignedOut>

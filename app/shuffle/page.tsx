@@ -1,6 +1,7 @@
 import { getUserPlaylists } from "@/lib/get-user-playlists";
 import type { Metadata } from "next";
 import PlaylistList from "./components/PlaylistList";
+import WelcomeDialog from "./components/WelcomeDialog";
 export const metadata: Metadata = {
   title: "Shuflr | True Shuffle.",
   description: "Shuffle with randomness.",
@@ -18,6 +19,7 @@ export default async function ShufflePage() {
 
   return (
     <>
+      <WelcomeDialog />
       <div className="mb-20 mt-20 flex h-screen flex-col items-center">
         <h1 className="pb-10 text-4xl">Choose a playlist.</h1>
         <PlaylistList playlists={playlists} />
