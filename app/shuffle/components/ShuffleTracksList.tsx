@@ -94,43 +94,52 @@ export default function ShuffleTrackList({
 
       let errorData;
       if (error instanceof Error) {
-        console.log("Error message:", error.message);
         try {
           errorData = JSON.parse(error.message);
           console.log("Parsed error data:", errorData);
         } catch (parseError) {
           console.log("Failed to parse error as JSON:", parseError);
-          errorData = { type: "UNKNOWN_ERROR", reason: error.message };
+          errorData = { type: "UNKNOWN_ERROR", reason: "UNKNOWN_ERROR" };
         }
       }
 
-      if (errorData?.reason === "NO_ACTIVE_DEVICE") {
-        toast({
-          title: "No Active Device",
-          description: "Please open Spotify and start playing something first.",
-          variant: "destructive",
-          duration: 5000,
-        });
-        return;
+      // Match error handling to server error structure
+      switch (errorData?.reason) {
+        case "NO_ACTIVE_DEVICE":
+          toast({
+            title: "No Active Device",
+            description:
+              "Please open Spotify and start playing something first.",
+            variant: "destructive",
+            duration: 5000,
+          });
+          break;
+        case "NOT_FOUND":
+          toast({
+            title: "Device Not Found",
+            description:
+              "No active Spotify device was found. Please start playing music on any device.",
+            variant: "destructive",
+            duration: 5000,
+          });
+          break;
+        case "PREMIUM_REQUIRED":
+          toast({
+            title: "Premium Required",
+            description:
+              "Queueing tracks requires a Spotify Premium subscription.",
+            variant: "destructive",
+            duration: 5000,
+          });
+          break;
+        default:
+          toast({
+            title: "Queue Failed",
+            description: `Could not add track to queue. ${errorData?.type === "TOKEN_ERROR" ? "Please try logging in again." : "Please try again."}`,
+            variant: "destructive",
+            duration: 5000,
+          });
       }
-
-      if (errorData?.reason === "PREMIUM_REQUIRED") {
-        toast({
-          title: "Premium Required",
-          description:
-            "Queueing tracks requires a Spotify Premium subscription.",
-          variant: "destructive",
-          duration: 5000,
-        });
-        return;
-      }
-
-      toast({
-        title: "Queue Failed",
-        description: `Could not add the track to queue. Error: ${errorData?.reason || "Unknown error"}`,
-        variant: "destructive",
-        duration: 5000,
-      });
     }
   };
 
@@ -163,39 +172,48 @@ export default function ShuffleTrackList({
               console.log("Parsed error data:", errorData);
             } catch (parseError) {
               console.log("Failed to parse error message:", parseError);
-              errorData = { type: "UNKNOWN_ERROR", reason: error.message };
+              errorData = { type: "UNKNOWN_ERROR", reason: "UNKNOWN_ERROR" };
             }
           }
 
-          if (errorData?.reason === "NO_ACTIVE_DEVICE") {
-            toast({
-              title: "No Active Device",
-              description:
-                "Please open Spotify and start playing something first.",
-              variant: "destructive",
-              duration: 5000,
-            });
-            return;
+          // Match error handling to server error structure
+          switch (errorData?.reason) {
+            case "NO_ACTIVE_DEVICE":
+              toast({
+                title: "No Active Device",
+                description:
+                  "Please open Spotify and start playing something first.",
+                variant: "destructive",
+                duration: 5000,
+              });
+              return;
+            case "NOT_FOUND":
+              toast({
+                title: "Device Not Found",
+                description:
+                  "No active Spotify device was found. Please start playing music on any device.",
+                variant: "destructive",
+                duration: 5000,
+              });
+              return;
+            case "PREMIUM_REQUIRED":
+              toast({
+                title: "Premium Required",
+                description:
+                  "Queueing tracks requires a Spotify Premium subscription.",
+                variant: "destructive",
+                duration: 5000,
+              });
+              return;
+            default:
+              toast({
+                title: "Queue Failed",
+                description: `Could not add tracks to queue. ${errorData?.type === "TOKEN_ERROR" ? "Please try logging in again." : "Please try again."}`,
+                variant: "destructive",
+                duration: 5000,
+              });
+              return;
           }
-
-          if (errorData?.reason === "PREMIUM_REQUIRED") {
-            toast({
-              title: "Premium Required",
-              description:
-                "Queueing tracks requires a Spotify Premium subscription.",
-              variant: "destructive",
-              duration: 5000,
-            });
-            return;
-          }
-
-          toast({
-            title: "Queue Failed",
-            description: `Could not add tracks to queue. Error: ${errorData?.reason || "Unknown error"}`,
-            variant: "destructive",
-            duration: 5000,
-          });
-          return;
         }
       }
 
