@@ -1,12 +1,6 @@
 import Link from "next/link";
 import { ModeToggle } from "./theme-toggle";
-import {
-  UserButton,
-  SignInButton,
-  SignedOut,
-  SignOutButton,
-  SignedIn,
-} from "@clerk/nextjs";
+import { UserButton, SignInButton, SignedOut } from "@clerk/nextjs";
 
 import { Button } from "./ui/button";
 import Image from "next/image";

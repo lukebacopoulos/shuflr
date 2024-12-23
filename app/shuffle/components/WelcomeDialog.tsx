@@ -45,7 +45,7 @@ const WelcomeDialog = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogAction className="w-full sm:w-auto">
-            Let's go!
+            Get Started
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
